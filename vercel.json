@@ -2,8 +2,8 @@
   "version": 2,
   "builds": [
     {
-      "src": "src/main.js",
-      "use": "@vercel/react"
+      "src": "package.json",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
