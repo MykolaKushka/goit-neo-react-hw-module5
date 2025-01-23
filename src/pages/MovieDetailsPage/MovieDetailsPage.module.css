@@ -1,0 +1,64 @@
+.container {
+  padding: 20px;
+}
+
+.moviePoster {
+  width: 200px;
+  height: auto;
+  border-radius: 5px;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.error {
+  color: red;
+}
+
+.goBackButton {
+  padding: 10px;
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 5px;
+}
+
+.goBackButton:hover {
+  background-color: #555;
+}
+
+.additionalInfo {
+  margin-top: 30px;
+}
+
+.tabs {
+  margin-top: 20px;
+}
+
+.tabButton {
+  padding: 10px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+
+.tabButton:hover {
+  background-color: #ddd;
+}
+
+.activeTab {
+  background-color: #333;
+  color: white;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
