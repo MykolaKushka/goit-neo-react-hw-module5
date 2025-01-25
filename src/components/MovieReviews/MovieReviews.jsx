@@ -1,7 +1,21 @@
-import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { fetchMovieReviews } from '../../api/tmdb-api';
 import styles from './MovieReviews.module.css';
 
-const MovieReviews = ({ reviews }) => {
+const MovieReviews = () => {
+  const { movieId } = useParams();
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      const reviewsData = await fetchMovieReviews(movieId);
+      setReviews(reviewsData);
+    };
+
+    fetchReviews();
+  }, [movieId]);
+
   return (
     <div className={styles.reviews}>
       <h2>Reviews</h2>
@@ -17,10 +31,6 @@ const MovieReviews = ({ reviews }) => {
       )}
     </div>
   );
-};
-
-MovieReviews.propTypes = {
-  reviews: PropTypes.array.isRequired,
 };
 
 export default MovieReviews;

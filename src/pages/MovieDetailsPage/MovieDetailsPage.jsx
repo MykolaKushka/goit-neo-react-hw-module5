@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchMovieDetails, fetchMovieCast, fetchMovieReviews } from '../../api/tmdb-api';
+import { fetchMovieDetails } from '../../api/tmdb-api';
 import MovieCast from '../../components/MovieCast/MovieCast';
 import MovieReviews from '../../components/MovieReviews/MovieReviews';
 import styles from './MovieDetailsPage.module.css';
@@ -9,20 +9,14 @@ const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const navigate = useNavigate();
   const [movieDetails, setMovieDetails] = useState(null);
-  const [cast, setCast] = useState([]);
-  const [reviews, setReviews] = useState([]);
+  const [activeTab, setActiveTab] = useState('cast');
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState('cast'); 
 
   useEffect(() => {
     const fetchDetails = async () => {
       try {
         const details = await fetchMovieDetails(movieId);
         setMovieDetails(details);
-        const movieCast = await fetchMovieCast(movieId);
-        setCast(movieCast);
-        const movieReviews = await fetchMovieReviews(movieId);
-        setReviews(movieReviews);
       } catch (err) {
         setError('Error fetching movie details.');
         console.error('Error:', err);
@@ -64,8 +58,8 @@ const MovieDetailsPage = () => {
           </button>
         </div>
 
-        {activeTab === 'cast' && <MovieCast cast={cast} />}
-        {activeTab === 'reviews' && <MovieReviews reviews={reviews} />}
+        {activeTab === 'cast' && <MovieCast />}
+        {activeTab === 'reviews' && <MovieReviews />}
       </div>
 
       {error && <p className={styles.error}>{error}</p>}

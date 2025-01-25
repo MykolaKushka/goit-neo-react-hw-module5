@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { searchMovies } from '../../api/tmdb-api';
 import MovieList from '../../components/MovieList/MovieList';
 import styles from './MoviesPage.module.css';
@@ -7,19 +8,30 @@ const MoviesPage = () => {
   const [query, setQuery] = useState('');
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!query) return;
+  useEffect(() => {
+    const searchQuery = searchParams.get('query') || '';  // Отримуємо query параметр з URL
+    setQuery(searchQuery);  // Оновлюємо стан для search input
 
-    try {
-      const results = await searchMovies(query);
-      setMovies(results);
-      setError('');
-    } catch (err) {
-      setError('Something went wrong. Please try again.');
-      console.error('Error searching movies:', err);
+    if (searchQuery) {
+      const fetchMovies = async () => {
+        try {
+          const results = await searchMovies(searchQuery);
+          setMovies(results);
+          setError('');
+        } catch (err) {
+          setError('Something went wrong. Please try again.');
+          console.error('Error searching movies:', err);
+        }
+      };
+      fetchMovies();
     }
+  }, [searchParams]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearchParams({ query: query });
   };
 
   return (
