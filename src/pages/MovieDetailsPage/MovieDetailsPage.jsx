@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { useParams, useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { fetchMovieDetails } from '../../api/tmdb-api';
-import MovieCast from '../../components/MovieCast/MovieCast';
-import MovieReviews from '../../components/MovieReviews/MovieReviews';
 import styles from './MovieDetailsPage.module.css';
 
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const movieRef = useRef(location.state?.from || '/movies'); 
   const [movieDetails, setMovieDetails] = useState(null);
-  const [activeTab, setActiveTab] = useState('cast');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -30,7 +29,7 @@ const MovieDetailsPage = () => {
 
   return (
     <div className={styles.container}>
-      <button onClick={() => navigate(-1)} className={styles.goBackButton}>
+      <button onClick={() => navigate(movieRef.current)} className={styles.goBackButton}>
         Go Back
       </button>
       <h1>{movieDetails.title}</h1>
@@ -43,23 +42,7 @@ const MovieDetailsPage = () => {
 
       <div className={styles.additionalInfo}>
         <h2>Additional Information</h2>
-        <div className={styles.tabs}>
-          <button
-            onClick={() => setActiveTab('cast')}
-            className={`${styles.tabButton} ${activeTab === 'cast' ? styles.activeTab : ''}`}
-          >
-            Cast
-          </button>
-          <button
-            onClick={() => setActiveTab('reviews')}
-            className={`${styles.tabButton} ${activeTab === 'reviews' ? styles.activeTab : ''}`}
-          >
-            Reviews
-          </button>
-        </div>
-
-        {activeTab === 'cast' && <MovieCast />}
-        {activeTab === 'reviews' && <MovieReviews />}
+        <Outlet />
       </div>
 
       {error && <p className={styles.error}>{error}</p>}
