@@ -1,8 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, NavLink, Outlet } from 'react-router-dom';
 import { fetchMovieDetails } from '../../api/tmdb-api';
-import MovieCast from '../../components/MovieCast/MovieCast';
-import MovieReviews from '../../components/MovieReviews/MovieReviews';
 import styles from './MovieDetailsPage.module.css';
 
 const MovieDetailsPage = () => {
@@ -11,7 +9,6 @@ const MovieDetailsPage = () => {
   const location = useLocation();
   const movieRef = useRef(location.state?.from || '/movies'); 
   const [movieDetails, setMovieDetails] = useState(null);
-  const [activeTab, setActiveTab] = useState('cast'); 
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -46,22 +43,21 @@ const MovieDetailsPage = () => {
       <div className={styles.additionalInfo}>
         <h2>Additional Information</h2>
         <div className={styles.tabs}>
-          <button
-            onClick={() => setActiveTab('cast')}
-            className={`${styles.tabButton} ${activeTab === 'cast' ? styles.activeTab : ''}`}
+          <NavLink 
+            to="cast" 
+            className={({ isActive }) => `${styles.tabButton} ${isActive ? styles.activeTab : ''}`}
           >
             Cast
-          </button>
-          <button
-            onClick={() => setActiveTab('reviews')}
-            className={`${styles.tabButton} ${activeTab === 'reviews' ? styles.activeTab : ''}`}
+          </NavLink>
+          <NavLink 
+            to="reviews" 
+            className={({ isActive }) => `${styles.tabButton} ${isActive ? styles.activeTab : ''}`}
           >
             Reviews
-          </button>
+          </NavLink>
         </div>
 
-        {activeTab === 'cast' && <MovieCast />}
-        {activeTab === 'reviews' && <MovieReviews />}
+        <Outlet />
       </div>
 
       {error && <p className={styles.error}>{error}</p>}
